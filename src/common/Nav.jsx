@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 export default function Nav() {
   const router = useRouter();
   const route = router.asPath.substring(1);
-  console.log(router.pathname);
+  // console.log(router.pathname);
 
   return router.pathname != '/' && router.pathname != '/login' ? (
     <nav className="bg-black shadow shadow-slate-400">

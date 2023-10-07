@@ -12,34 +12,38 @@ import { TrashIcon } from '@heroicons/react/20/solid';
 import { deleteProduct } from '@services/api/products';
 import Link from 'next/link';
 
-const PRODUCT_LIMIT = 6;
-const PRODUCT_OFFSET = 0;
+const PRODUCT_LIMIT = 10;
+// const PRODUCT_OFFSET = 0;
 
 export default function Products() {
   const [offsetProducts, setOffsetProducts] = useState(0);
-  const [products, setProducts] = useState([])
-  // const getProducts = useFetch(endPoints.products.getProducts(PRODUCT_LIMIT, offsetProducts), offsetProducts);
+  // const [products, setProducts] = useState([])
+  const products = useFetch(endPoints.products.getProducts(PRODUCT_LIMIT, offsetProducts), offsetProducts);
+  
   // setProducts(getProducts)
   const totalProducts = useFetch(endPoints.products.getProducts(0, 0)).length;
+
 
   const [open, setOpen] = useState(false);
 
   const { alert, setAlert, toggleAlert } = useAlert();
 
-  useEffect(() =>   {
-    async function getProducts() {
-      const response = await axios.get(endPoints.products.allProducts)
-      setProducts(response.data)
-    }
+  // useEffect(() =>   {
+  //   async function getProducts() {
+  //     // const getProducts = useFetch(endPoints.products.getProducts(PRODUCT_LIMIT, offsetProducts));
+  //     // setProducts(getProducts)
+  //     // const response = await axios.get(endPoints.products.getProducts(PRODUCT_LIMIT, offsetProducts))
+  //     // setProducts(response.data)
+  //   }
 
-    try {
-      getProducts()
-    } catch (error) {
-      console.error(error);
-    }
+  //   try {
+  //     getProducts()
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
 
-  }, [alert])
-
+  // }, [alert])
+  
   const handleDelete = (id) => {
     deleteProduct(id)
       .then(() => {
@@ -53,7 +57,7 @@ export default function Products() {
       .catch((error) => {
         setAlert({
           active: true,
-          message: `Product could not be added. Error: ${error.message}`,
+          message: `Product could not be deleted. Error: ${error.message}`,
           type: 'error',
           autoClose: false,
         })
@@ -138,10 +142,10 @@ export default function Products() {
                         </Link>
                         
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <a href="#" className="text-red-600 hover:text-red-700">
-                          <TrashIcon className='w-5 h-5 text-red-600 hover:text-red-700' onClick={() => handleDelete(product.id)}/>
-                        </a>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">
+                        <button className="text-red-600 hover:text-red-700" onClick={() => handleDelete(product.id)}>
+                          <TrashIcon className='w-5 h-5 text-red-600 hover:text-red-700'/>
+                        </button>
                       </td>
                     </tr>
                   ))}
