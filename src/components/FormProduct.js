@@ -1,12 +1,14 @@
 import { useRef, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { addProduct, updateProduct } from '@services/api/products';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function FormProduct({ setOpen, setAlert, product }) {
   const formRef = useRef(null);
   // console.log(product);
   const router = useRouter();
-
+  
   const handleSubmit = (event) => {
     event.preventDefault();
     const formData = new FormData(formRef.current);
@@ -18,31 +20,61 @@ export default function FormProduct({ setOpen, setAlert, product }) {
       images: [formData.get('images').name],
     };
 
+    const notify = () => {
+      toast.success("Product has been added successfully", {
+        theme: 'dark'
+      });
+    }
+
+    const notifyError = (error) => {
+      toast.error(`Product could not be saved. ${error.message}`, {
+        theme: 'dark'
+      });
+    }
+
+    const notifyEdit = () => {
+      toast.success("Product has been edited successfully", {
+        theme: 'dark'
+      });
+    }
+
+    const notifyErrorUpdate = (error) => {
+      toast.error(`Product could not be updated. ${error.message}`, {
+        theme: 'dark'
+      });
+    }
+
     if (product) {
       // console.log(data);
       updateProduct(product.id, data)
-        .then((response) => {
+        .then(() => {
           router.push('/dashboard/products/')
+          notifyEdit()
+        })
+        .catch((error) => {
+          notifyErrorUpdate(error)
         })
     } else {
       // console.log(data);
       addProduct(data)
         .then(() => {
-          setAlert({
-            active: true,
-            message: 'Product has been added successfully',
-            type: 'success',
-            autoClose: false,
-          });
+          notify()
+          // setAlert({
+          //   active: true,
+          //   message: 'Product has been added successfully',
+          //   type: 'success',
+          //   autoClose: false,
+          // });
           setOpen(false);
         })
         .catch((error) => {
-          setAlert({
-            active: true,
-            message: `Product could not be added. Error: ${error.message}`,
-            type: 'error',
-            autoClose: false,
-          });
+          notifyError(error)
+          // setAlert({
+          //   active: true,
+          //   message: `Product could not be added. Error: ${error.message}`,
+          //   type: 'error',
+          //   autoClose: false,
+          // });
         });
     }
   };
@@ -57,6 +89,7 @@ export default function FormProduct({ setOpen, setAlert, product }) {
 
   return (
     <form ref={formRef} onSubmit={handleSubmit}>
+      {/* <ToastContainer position='bottom-center'/> */}
       <div className="overflow-hidden">
         <div className="px-4 py-4 bg-gray-700 rounded-t-xl sm:px-6 sm:py-3">
           <div className="grid grid-cols-6 gap-6">
