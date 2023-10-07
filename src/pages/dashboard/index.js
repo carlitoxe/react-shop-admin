@@ -19,8 +19,9 @@ export default function Dashboard() {
   const countOcurrencies = (array) => array.reduce((prev, curr) => ((prev[curr] = ++prev[curr] || 1), prev), {})
   // console.log(countOcurrencies(categoryCount));
 
-  // console.log(categoryNames);
-  // console.log(categoryCount);
+  console.log(categoryNames);
+  console.log(categoryCount);
+  // Chart.defaults?.global.defaultFontColor = "#fff";
 
 
   const data = {
@@ -28,8 +29,9 @@ export default function Dashboard() {
       {
         label: 'Categories',
         data: countOcurrencies(categoryCount),
-        borderWidth: 2,
+        borderWidth: 4,
         backgroundColor: ['rgb(220 38 38)', 'rgb(146 64 14)', 'rgb(8 145 178)', 'rgb(250 204 21)', 'rgb(22 163 74)'],
+        // fontColor: ['white']
       },
     ],
   };

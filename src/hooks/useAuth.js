@@ -2,8 +2,10 @@ import { useState, useContext, createContext } from 'react';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import endPoints from '@services/api/';
+import { useRouter } from 'next/router';
 
 const AuthContext = createContext();
+
 
 export function AuthProvider({ children }) {
   const auth = useAuthProvider();
@@ -37,8 +39,19 @@ function useAuthProvider() {
     }
   };
 
+  const logOut = () => {
+
+    Cookies.remove('token');
+    setUser(null);
+    delete axios.defaults.headers.Authorization;
+    // const router = useRouter();
+    // router.push('/')
+    window.location.href = '/login';
+  }
+
   return {
     user,
     signIn,
+    logOut
   };
 }

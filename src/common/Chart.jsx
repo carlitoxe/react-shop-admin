@@ -9,16 +9,29 @@ export const Chart = ({ chartData }) => {
       <Bar
         data={chartData}
         options={{
-          title: {
-            display: true,
-            text: 'Category',
-            fontSize: 24,
-           
-          },
-          legend: {
-            display: true,
-            position: 'right',
-          },
+          // responsive: true,
+          // title: {
+          //   display: true,
+          //   text: 'Categories',
+          //   fontSize: 20,
+          // },
+          // legend: {
+          //   display: true,
+          //   position: 'top',
+          // },
+      
+          scales: {
+            x: {
+              ticks: {
+                color: "white"
+              }
+            },
+            y: {
+              ticks: {
+                color: "gray"
+              }
+            }
+          }
         }}
       />
     </>

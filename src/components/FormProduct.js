@@ -1,8 +1,11 @@
-import { useRef } from 'react';
-import { addProduct } from '@services/api/products';
+import { useRef, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { addProduct, updateProduct } from '@services/api/products';
 
-export default function FormProduct() {
+export default function FormProduct({ setOpen, setAlert, product }) {
   const formRef = useRef(null);
+  // console.log(product);
+  const router = useRouter();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -14,32 +17,79 @@ export default function FormProduct() {
       categoryId: parseInt(formData.get('category')),
       images: [formData.get('images').name],
     };
-    // console.log(data);
-    addProduct(data).then(response => console.log(response))
+
+    if (product) {
+      // console.log(data);
+      updateProduct(product.id, data)
+        .then((response) => {
+          router.push('/dashboard/products/')
+        })
+    } else {
+      // console.log(data);
+      addProduct(data)
+        .then(() => {
+          setAlert({
+            active: true,
+            message: 'Product has been added successfully',
+            type: 'success',
+            autoClose: false,
+          });
+          setOpen(false);
+        })
+        .catch((error) => {
+          setAlert({
+            active: true,
+            message: `Product could not be added. Error: ${error.message}`,
+            type: 'error',
+            autoClose: false,
+          });
+        });
+    }
   };
+
+  useEffect(() => {
+    // Se coge la referencia al nodo de HTML del select
+    const categoryTag = document.querySelector('#category');
+    // Se cambiar el valor del nodo por el valor del id; eso hace que el valor del <option> cambie tambien
+    categoryTag.value = product?.category?.id;
+  }, [product]);
+
 
   return (
     <form ref={formRef} onSubmit={handleSubmit}>
       <div className="overflow-hidden">
-        <div className="px-4 py-4 bg-gray-700 sm:px-6 sm:py-3">
+        <div className="px-4 py-4 bg-gray-700 rounded-t-xl sm:px-6 sm:py-3">
           <div className="grid grid-cols-6 gap-6">
             <div className="col-span-6 sm:col-span-3">
               <label htmlFor="title" className="block text-black text-sm font-medium text-white">
                 Title
               </label>
-              <input type="text" name="title" id="title" className="mt-1 px-2 text-black py-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+              <input
+                defaultValue={product?.title}
+                type="text"
+                name="title"
+                id="title"
+                className="mt-1 px-2 text-black py-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+              />
             </div>
             <div className="col-span-6 sm:col-span-3">
               <label htmlFor="price" className="block text-sm font-medium text-white">
                 Price
               </label>
-              <input type="number" name="price" id="price" className="mt-1 text-black py-1 px-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+              <input
+                defaultValue={product?.price}
+                type="number"
+                name="price"
+                id="price"
+                className="mt-1 text-black py-1 px-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+              />
             </div>
             <div className="col-span-6">
               <label htmlFor="category" className="block text-sm font-medium text-white">
                 Category
               </label>
               <select
+                defaultValue={product?.category}
                 id="category"
                 name="category"
                 autoComplete="category-name"
@@ -58,6 +108,7 @@ export default function FormProduct() {
                 Description
               </label>
               <textarea
+                defaultValue={product?.description}
                 name="description"
                 id="description"
                 autoComplete="description"
@@ -84,7 +135,7 @@ export default function FormProduct() {
                         className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
                       >
                         <span>Upload a file</span>
-                        <input id="images" name="images" type="file" className="sr-only" />
+                        <input defaultValue={product?.images} id="images" name="images" type="file" className="sr-only" />
                       </label>
                       <p className="pl-1 text-white">or drag and drop</p>
                     </div>
@@ -95,7 +146,7 @@ export default function FormProduct() {
             </div>
           </div>
         </div>
-        <div className="px-4 py-3 bg-gray-700 text-right sm:px-6">
+        <div className="px-4 py-3 bg-gray-700 rounded-b-xl text-right sm:px-6">
           <button
             type="submit"
             className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"

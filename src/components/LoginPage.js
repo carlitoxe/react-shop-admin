@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { useRouter } from 'next/router';
-import { LockClosedIcon, ExclamationCircleIcon } from '@heroicons/react/24/solid';
+import { LockClosedIcon, ExclamationCircleIcon, BuildingStorefrontIcon } from '@heroicons/react/24/solid';
 import { useAuth } from '@hooks/useAuth';
 
 export default function LoginPage() {
@@ -39,11 +39,13 @@ export default function LoginPage() {
 
   return (
     <>
-      <div className="min-h-full flex items-center justify-center py-8 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-full flex items-center justify-center py-8 pt-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           <div>
-            <img className="mx-auto h-12 w-auto" src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg" alt="Workflow" />
-            <h2 className="mt-6 text-center text-3xl font-extrabold text-white">Sign in to your account</h2>
+            {/* <img className="mx-auto h-12 w-auto" src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg" alt="Workflow" /> */}
+            <BuildingStorefrontIcon className='mx-auto text-indigo-500 w-12 h-12 hover:text-indigo-700' />
+
+            <h2 className="mt-6 text-center text-3xl font-extrabold">Sign in to your account</h2>
           </div>
           <form className="mt-6 space-y-5" onSubmit={handleSubmit}>
             {errorLogin && (
@@ -89,7 +91,7 @@ export default function LoginPage() {
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <input id="remember-me" name="remember-me" type="checkbox" className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" />
-                <label htmlFor="remember-me" className="ml-2 block text-sm text-white">
+                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-400">
                   Remember me
                 </label>
               </div>

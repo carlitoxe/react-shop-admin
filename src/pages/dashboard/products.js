@@ -1,33 +1,75 @@
-import { useState } from 'react';
-import { PencilIcon, PlusIcon } from '@heroicons/react/20/solid';
+import { useEffect, useState } from 'react';
+import { PencilIcon, SquaresPlusIcon } from '@heroicons/react/24/solid';
 import useFetch from '@hooks/useFetch';
 import endPoints from '@services/api';
 import Paginate from '@components/Paginate';
 import Modal from '@common/Modal';
 import FormProduct from '@components/FormProduct';
+import axios from 'axios';
+import useAlert from '@hooks/useAlert';
+import Alert from '@common/Alert';
+import { TrashIcon } from '@heroicons/react/20/solid';
+import { deleteProduct } from '@services/api/products';
+import Link from 'next/link';
 
 const PRODUCT_LIMIT = 6;
 const PRODUCT_OFFSET = 0;
 
 export default function Products() {
   const [offsetProducts, setOffsetProducts] = useState(0);
-  const products = useFetch(endPoints.products.getProducts(PRODUCT_LIMIT, offsetProducts), offsetProducts);
+  const [products, setProducts] = useState([])
+  // const getProducts = useFetch(endPoints.products.getProducts(PRODUCT_LIMIT, offsetProducts), offsetProducts);
+  // setProducts(getProducts)
   const totalProducts = useFetch(endPoints.products.getProducts(0, 0)).length;
 
   const [open, setOpen] = useState(false);
 
+  const { alert, setAlert, toggleAlert } = useAlert();
+
+  useEffect(() =>   {
+    async function getProducts() {
+      const response = await axios.get(endPoints.products.allProducts)
+      setProducts(response.data)
+    }
+
+    try {
+      getProducts()
+    } catch (error) {
+      console.error(error);
+    }
+
+  }, [alert])
+
+  const handleDelete = (id) => {
+    deleteProduct(id)
+      .then(() => {
+        setAlert({
+          active: true,
+          message: 'Product has been DELETED successfully',
+          type: 'success',
+          autoClose: true
+        })
+      })
+      .catch((error) => {
+        setAlert({
+          active: true,
+          message: `Product could not be added. Error: ${error.message}`,
+          type: 'error',
+          autoClose: false,
+        })
+      })
+  }
+
   return (
     <>
+      <Alert alert={alert} handleClose={toggleAlert} />
       <div className="lg:flex lg:items-center lg:justify-between mb-6">
         <div className="min-w-0 flex-1">
           <h2 className="text-2xl font-bold leading-7 text-white sm:truncate sm:text-3xl sm:tracking-tight">List of Products</h2>
         </div>
         <div className="mt-5 flex lg:ml-4 lg:mt-0">
           <span className="hidden sm:block">
-            <button type="button" className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-              <PencilIcon className="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
-              Edit
-            </button>
+     
           </span>
 
           <span className="sm:ml-3">
@@ -36,7 +78,7 @@ export default function Products() {
               className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               onClick={() => setOpen(true)}
             >
-              <PlusIcon className="-ml-0.5 mr-1.5 h-5 w-5" aria-hidden="true" />
+              <SquaresPlusIcon className="-ml-0.5 mr-1.5 h-5 w-5" aria-hidden="true" />
               Add Product
             </button>
           </span>
@@ -91,13 +133,14 @@ export default function Products() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-white">{product.id}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                          Edit
-                        </a>
+                        <Link href={`edit/${product.id}`} className=''>
+                          <PencilIcon className="h-5 w-5 text-gray-400 hover:text-gray-500" aria-hidden="true" />
+                        </Link>
+                        
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <a href="#" className="text-red-600 hover:text-red-900">
-                          Delete
+                        <a href="#" className="text-red-600 hover:text-red-700">
+                          <TrashIcon className='w-5 h-5 text-red-600 hover:text-red-700' onClick={() => handleDelete(product.id)}/>
                         </a>
                       </td>
                     </tr>
@@ -109,7 +152,7 @@ export default function Products() {
         </div>
       </div>
       <Modal open={open} setOpen={setOpen}>
-        <FormProduct />
+        <FormProduct setOpen={setOpen} setAlert={setAlert} />
       </Modal>
     </>
   );
