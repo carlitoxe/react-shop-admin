@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useAuth } from '@hooks/useAuth';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
-import { BellIcon, Bars3Icon, XMarkIcon, ArrowLeftOnRectangleIcon, BuildingStorefrontIcon } from '@heroicons/react/24/solid';
+import { BellIcon, Bars3Icon, XMarkIcon, BuildingStorefrontIcon, UserIcon, ArrowRightOnRectangleIcon, UserCircleIcon } from '@heroicons/react/24/solid';
 // import { ,  } from '@heroicons/react/20/solid';
 
 const navigation = [
@@ -90,9 +90,10 @@ export default function Header() {
                           leaveFrom="transform opacity-100 scale-100"
                           leaveTo="transform opacity-0 scale-95"
                         >
-                          <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                            <button onClick={logOut} className="block px-4 py-2 text-sm text-gray-700">
-                              Log out
+                          <Menu.Items className="flex bg-gray-900 justify-center origin-top-right absolute right-0 mt-2 w-36 rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5 focus:outline-none">
+                            <button onClick={logOut} className="block text-gray-400 flex items-center justify-center px-4 py-2 hover:text-white">
+                              <ArrowRightOnRectangleIcon className='w-6 h-6 mr-1'/>
+                              Sign out
                             </button>
                           </Menu.Items>
                         </Transition>
@@ -101,7 +102,7 @@ export default function Header() {
                   ) : (
                     <button className='bg-indigo-600 rounded-lg bg-indigo-700 py-1 px-4 hover:bg-indigo-800 group'>
                       <Link href="/login" className="flex items-center mr-1">
-                        <ArrowLeftOnRectangleIcon className='w-6 h-6 mr-0.5 text-indigo-400 group-hover:text-white rotate-180' />
+                        <UserIcon className='w-6 h-6 mr-1 text-indigo-300 group-hover:text-white' />
                         <p className='text-sm font-medium'>Sign In</p>
                       </Link>
                     </button>
