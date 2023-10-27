@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -18,14 +19,10 @@ export default function Home() {
             }}
           />
         </div>
-        <div className="mx-auto max-w-2xl py-32 sm:py-12 lg:py-24">
+        <div className="mx-auto max-w-2xl py-32 sm:py-12 lg:py-19">
           <div className="hidden sm:mb-8 sm:flex sm:justify-center">
             <div className="relative rounded-full px-3 py-1 text-sm leading-6 text-white ring-1 ring-gray-900/10 hover:ring-gray-900/20">
               Announcing our next round of funding.{' '}
-              <a href="#" className="font-semibold text-white">
-                <span className="absolute inset-0" aria-hidden="true" />
-                Read more <span aria-hidden="true">&rarr;</span>
-              </a>
             </div>
           </div>
           <div className="text-center">
@@ -34,15 +31,15 @@ export default function Home() {
               Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt amet fugiat veniam occaecat fugiat aliqua.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
-              <a
-                href="#"
-                className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              <Link
+                href="/dashboard"
+                className="rounded-md bg-indigo-700 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
-                Get started
-              </a>
-              <a href="#" className="text-sm font-semibold leading-6 text-white">
-                Learn more <span aria-hidden="true">→</span>
-              </a>
+                Go to Dashboard
+              </Link>
+              <Link href="/login" className="text-sm font-semibold leading-6 text-white hover:text-indigo-600">
+                Sign In <span className="text-xl">→</span>
+              </Link>
             </div>
           </div>
         </div>

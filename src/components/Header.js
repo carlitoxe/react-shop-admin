@@ -14,9 +14,9 @@ const navigation = [
   { name: 'Sales', href: '/sales' },
 ];
 const userNavigation = [
-  { name: 'Your Profile', href: '#' },
-  { name: 'Settings', href: '#' },
-  { name: 'Sign out', href: '#' },
+  // { name: 'Your Profile', href: '#' },
+  // { name: 'Settings', href: '#' },
+  { name: 'Sign out' },
 ];
 
 function classNames(...classes) {
@@ -46,7 +46,7 @@ export default function Header() {
                   </div> */}
                   <BuildingStorefrontIcon className='w-7 h-7' />
                   <div className="hidden md:block">
-                    <div className="ml-10 flex items-baseline space-x-4">
+                    <div className="ml-10 flex items-baseline text-base space-x-4">
                       {navigation.map((item) => {
                         const isActive = pathname === item.href;
                         return (
@@ -65,13 +65,13 @@ export default function Header() {
                 <div className="hidden md:block">
                   {user?.name != undefined ? (
                     <div className="ml-4 flex items-center md:ml-6">
-                      <button
+                      {/* <button
                         type="button"
                         className="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
                       >
                         <span className="sr-only">View notifications</span>
                         <BellIcon className="h-6 w-6" aria-hidden="true" />
-                      </button>
+                      </button> */}
 
                       {/* Profile dropdown */}
                       <Menu as="div" className="ml-3 relative">
@@ -91,7 +91,7 @@ export default function Header() {
                           leaveTo="transform opacity-0 scale-95"
                         >
                           <Menu.Items className="flex bg-gray-900 justify-center origin-top-right absolute right-0 mt-2 w-36 rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5 focus:outline-none">
-                            <button onClick={logOut} className="block text-gray-400 flex items-center justify-center px-4 py-2 hover:text-white">
+                            <button onClick={logOut} className="block text-gray-400 flex items-center justify-center px-4 py-2 hover:text-white font-medium">
                               <ArrowRightOnRectangleIcon className='w-6 h-6 mr-1'/>
                               Sign out
                             </button>
@@ -120,42 +120,57 @@ export default function Header() {
 
             <Disclosure.Panel className="md:hidden">
               <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                {navigation.map((item) => (
+                {navigation.map((item) => {
+                  const isActive = pathname === item.href
+                  return (
                   <Disclosure.Button
                     key={item.name}
                     as="a"
                     href={item.href}
-                    className={classNames(item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'block px-3 py-2 rounded-md text-base font-medium')}
-                    aria-current={item.current ? 'page' : undefined}
+                    className={classNames(isActive ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'block px-3 py-2 rounded-md text-base font-medium')}
+                    aria-current={isActive ? 'page' : undefined}
                   >
                     {item.name}
                   </Disclosure.Button>
-                ))}
+                  )
+                })}
               </div>
               <div className="pt-4 pb-3 border-t border-gray-700">
-                <div className="flex items-center px-5">
-                  <div className="flex-shrink-0">
-                    <img className="h-10 w-10 rounded-full" src={userData.imageUrl} alt="" />
-                  </div>
-                  <div className="ml-3">
-                    <div className="text-base font-medium leading-none text-white">{userData.name}</div>
-                    <div className="text-sm font-medium leading-none text-gray-400">{userData.email}</div>
-                  </div>
-                  <button
-                    type="button"
-                    className="ml-auto bg-gray-800 flex-shrink-0 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
-                  >
-                    <span className="sr-only">View notifications</span>
-                    <BellIcon className="h-6 w-6" aria-hidden="true" />
-                  </button>
-                </div>
-                <div className="mt-3 px-2 space-y-1">
-                  {userNavigation.map((item) => (
-                    <Disclosure.Button key={item.name} as="a" href={item.href} className="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700">
-                      {item.name}
-                    </Disclosure.Button>
-                  ))}
-                </div>
+              { user?.name != undefined ? 
+                 (   <div className="flex items-center px-5 justify-center">
+                    <div className="flex-shrink-0">
+                      <img className="h-10 w-10 rounded-full" src={userData.imageUrl} alt="" />
+                    </div>
+                    <div className="ml-3">
+                      <div className="text-base font-medium leading-none text-white">{userData.name}</div>
+                      <div className="text-sm font-medium leading-none text-gray-400">{userData.email}</div>
+                    </div>
+                    <button
+                      type="button"
+                      className="ml-auto bg-gray-800 flex-shrink-0 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                    >
+                      <span className="sr-only">View notifications</span>
+                      {/* <BellIcon className="h-6 w-6" aria-hidden="true" /> */}
+                    </button>
+                    <div className="px-2 space-y-1">
+                      {userNavigation.map((item) => (
+                        <Disclosure.Button key={item.name} as="a" href={logOut} className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700">
+                          {item.name}
+                        </Disclosure.Button>
+                      ))}
+                    </div>   
+                  </div> ) : 
+                        
+                  (<div className="px-2 space-y-1">
+                  <Disclosure.Button as="a" className='block text-gray-300 font-medium px-3 py-2 rounded-md text-base font-medium hover:text-white hover:bg-gray-700 group'>
+                          <Link href="/login" className="flex items-center mr-1">
+                            {/* <UserIcon className='w-6 h-6 mr-1 text-indigo-300 group-hover:text-white' /> */}
+                            <p className='text-base font-medium'>Sign In</p>
+                          </Link>
+                        </Disclosure.Button>
+                        </div>
+                        )
+              }
               </div>
             </Disclosure.Panel>
           </>
