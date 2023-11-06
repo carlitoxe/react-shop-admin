@@ -39,7 +39,7 @@ export default function Header() {
         {({ open }) => (
           <>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="flex items-center justify-between h-16">
+              <div className="flex items-center justify-between h-16 px-1">
                 <div className="flex items-center">
                   {/* <div className="flex-shrink-0">
                     <img className="h-8 w-8" src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg" alt="Workflow" />
@@ -135,7 +135,7 @@ export default function Header() {
                   );
                 })}
               </div>
-              <div className="pt-4 pb-3 border-t border-gray-700">
+              <div className="py-3 px-2 border-t border-gray-700 sm:px-3">
                 {user?.name != undefined ? (
                   <div className="flex items-center px-5 justify-center">
                     <div className="flex-shrink-0">
@@ -161,11 +161,11 @@ export default function Header() {
                     </div>
                   </div>
                 ) : (
-                  <div className="px-2 space-y-1">
+                  // <div className="space-y-1">
                     <Disclosure.Button as="a" href='/login' className="block text-gray-300 font-medium px-3 py-2 rounded-md text-base font-medium hover:text-white hover:bg-gray-700 group">
                       Sign in
                     </Disclosure.Button>
-                  </div>
+                  // </div>
                 )}
               </div>
             </Disclosure.Panel>
