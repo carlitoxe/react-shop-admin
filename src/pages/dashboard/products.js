@@ -1,5 +1,12 @@
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import Head from 'next/head';
+import Image from 'next/image';
 import { PencilIcon, SquaresPlusIcon } from '@heroicons/react/24/solid';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { TrashIcon } from '@heroicons/react/20/solid';
+import { deleteProduct } from '@services/api/products';
 import useFetch from '@hooks/useFetch';
 import endPoints from '@services/api';
 import Paginate from '@components/Paginate';
@@ -8,12 +15,6 @@ import FormProduct from '@components/FormProduct';
 import axios from 'axios';
 // import useAlert from '@hooks/useAlert';
 // import Alert from '@common/Alert';
-import { TrashIcon } from '@heroicons/react/20/solid';
-import { deleteProduct } from '@services/api/products';
-import Link from 'next/link';
-import Head from 'next/head';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 const PRODUCT_LIMIT = 10;
 // const PRODUCT_OFFSET = 0;
@@ -144,7 +145,14 @@ export default function Products() {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           <div className="flex-shrink-0 h-10 w-10">
-                            <img className="h-10 w-10 rounded-full" src={product.images[0]} alt="" />
+                            <Image 
+                              loader={() => product.images[0]} 
+                              src={product.images[0]} 
+                              width={40} 
+                              height={40}
+                              className='rounded-full'
+                            />
+                            {/* <img className="h-10 w-10 rounded-full" src={product.images[0]} alt="" /> */}
                           </div>
                           <div className="ml-4">
                             <div className="text-sm font-medium text-white">{product.title}</div>
